@@ -6,20 +6,23 @@ package tiralabra.toimitusreitinlaskijasovellus;
 
 public class Algoritmit {
     
-    public static void kmoBfRekursio(int pituus, int[] vierailtu, int nykyinen, int k, int[] paras, int n, int[][] verkko){
+    public static void kmBfRekursio(int pituus, int[] vierailtu, int nykyinen, int k, int[] paras, int[] parasReitti, int n, int[][] verkko){
         if(k == n){
-            if(pituus + verkko[nykyinen][1] < paras[0]){
-                paras[0] = pituus + verkko[nykyinen][1];
+            if(pituus + verkko[nykyinen][0] < paras[0]){
+                paras[0] = pituus + verkko[nykyinen][0];
+                // Kopioidaan paras tähänastinen reitti muistiin:
+                for(int i = 0; i < n; i++){
+                    parasReitti[i] = vierailtu[i]; 
+                }
             }
             return;
         }
-        for(int i = 2; i <= n; i++){
+        for(int i = 1; i < n; i++){
             if(vierailtu[i] == 0 && pituus + verkko[nykyinen][i] < paras[0]){
                 int[] vierailtu2 = vierailtu.clone();  // Kopioidaan vierailtu-taulukko.
-                vierailtu2[i] = k;
-                kmoBfRekursio(pituus + verkko[nykyinen][i], vierailtu2, i, k + 1, paras, n, verkko);
+                vierailtu2[i] = k + 1;
+                kmBfRekursio(pituus + verkko[nykyinen][i], vierailtu2, i, k + 1, paras, parasReitti, n, verkko);
             }
-            ++i;
         }
     }
     
@@ -33,17 +36,17 @@ public class Algoritmit {
         int n = verkko.length;
         
         int[] paras = {Integer.MAX_VALUE};
-        int[] parasReitti = new int[n + 1];
+        int[] parasReitti = new int[n];
         
-        int[] vierailtu = new int[n + 1];
+        int[] vierailtu = new int[n];
         for(int i = 0; i < n; i++){
-            vierailtu[i] = 0;
+            vierailtu[i] = 0; // 0 tarkoittaa että solmussa ei ole vierailtu.
         }
-        vierailtu[1] = 1; 
+        vierailtu[0] = 1; 
         
-        kmoBfRekursio(0, vierailtu, 1, 1, paras, n, verkko);
+        kmBfRekursio(0, vierailtu, 0, 1, paras, parasReitti, n, verkko);
         
-        return 1;
+        return paras[0];
     }
     
 }
