@@ -28,9 +28,14 @@ public class Algoritmit {
     
     
     // Pitkälti TIRA kalvon 390 mukaan, mutta muokattu ominaisuus joka muistaa lyhimmän reitin pituuden lisäki myös itse reitin.
-    // Toteutettu tämä pitämällä kirjaa vierailuissa solmuista vierailtu-taulukon avulla joka muutettu booleanista intiksi,
+    // Toteutettu tämä pitämällä kirjaa vierailluista solmuista vierailtu-taulukon avulla joka muutettu booleanista intiksi,
     // ja jossa pidetään kirjaa milloin mihinkin solmuun on menty.
-    // Kun kyseisestä taulukosta tulee lyhin niin kopioidaan sen sisältö parasReitti-taulukkoon.
+    // Kun läpikäyty reitti huomataan lyhimmäksi siihenastiseksi reitiksi niin kopioidaan vierailtu-taulukon sisältö parasReitti-taulukkoon.
+    /**
+     * Toteutus vielä hieman kesken, ei vielä palauta parasta reittiä, ainoastaan parhaan reitin pituuden.
+     * @param verkko
+     * @return 
+     */
     public static int kauppamatkustajaBruteForce(int[][] verkko){
         
         int n = verkko.length;
