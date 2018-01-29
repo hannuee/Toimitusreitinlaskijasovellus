@@ -1,6 +1,5 @@
 /**
- *
- * @author Hannu
+ *@author Hannu Erälaukko
  */
 package tiralabra.toimitusreitinlaskijasovellus;
 
