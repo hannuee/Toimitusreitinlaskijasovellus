@@ -21,7 +21,7 @@ public class Algoritmit {
      * @param verkko Verkko matriisimuodossa.
      * @see #kauppamatkustajaBruteForce(int[][] verkko)
      */
-    private static void kmBfRekursio(int pituus, int[] vierailtu, int nykyinen, int k, int[] paras, int[] parasReitti, final int solmuja, int[][] verkko){
+    private static void kmBFrekursio(int pituus, int[] vierailtu, int nykyinen, int k, int[] paras, int[] parasReitti, final int solmuja, int[][] verkko){
         // JOS ollaan vierailtu kaikissa solmuissa NIIN tämä rekursiohaara loppuu.
         if(k == solmuja){  
             // JA JOS reitti on tähänastisista reiteistä lyhin huomioiden matka solmuun 1 
@@ -42,7 +42,7 @@ public class Algoritmit {
             if(vierailtu[i] == 0 && pituus + verkko[nykyinen][i] < paras[0]){  
                 int[] vierailtu2 = vierailtu.clone();  // Kopioidaan vierailtu-taulukko.
                 vierailtu2[i] = k + 1;
-                kmBfRekursio(pituus + verkko[nykyinen][i], vierailtu2, i, k + 1, paras, parasReitti, solmuja, verkko);
+                kmBFrekursio(pituus + verkko[nykyinen][i], vierailtu2, i, k + 1, paras, parasReitti, solmuja, verkko);
             }
         }
     }
@@ -80,9 +80,21 @@ public class Algoritmit {
         vierailtu[0] = 1;
         
         // Käydään rekursion avulla läpi reittivaihtoehdot.
-        kmBfRekursio(0, vierailtu, 0, 1, paras, parasReitti, solmuja, verkko);
+        kmBFrekursio(0, vierailtu, 0, 1, paras, parasReitti, solmuja, verkko);
         
         return paras[0];
+    }
+    
+    
+    public static int kauppamatkustajaDynaaminen(int[][] verkko){
+        
+        
+        return 0;
+    }
+    
+    
+    public static int kauppamatkustajaHeuristinen(int[][] verkko){
+        return 0;
     }
     
 }
