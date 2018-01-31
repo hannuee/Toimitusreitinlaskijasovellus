@@ -3,7 +3,7 @@
  */
 package tiralabra.toimitusreitinlaskijasovellus;
 
-
+import java.util.HashSet;
 
 public class Algoritmit {
     
@@ -41,7 +41,7 @@ public class Algoritmit {
         for(int i = 1; i < solmuja; i++){
             if(vierailtu[i] == 0 && pituus + verkko[nykyinen][i] < paras[0]){  
                 int[] vierailtu2 = vierailtu.clone();  // Kopioidaan vierailtu-taulukko.
-                vierailtu2[i] = k + 1;
+                vierailtu2[i] = k + 1;  // KOMMENTOI!!!!
                 kmBFrekursio(pituus + verkko[nykyinen][i], vierailtu2, i, k + 1, paras, parasReitti, solmuja, verkko);
             }
         }
@@ -82,7 +82,7 @@ public class Algoritmit {
         // Käydään rekursion avulla läpi reittivaihtoehdot.
         kmBFrekursio(0, vierailtu, 0, 1, paras, parasReitti, solmuja, verkko);
         
-        return paras[0];
+        return paras[0];  // PALAUTUS!!!!!!!!
     }
     
     
@@ -93,8 +93,62 @@ public class Algoritmit {
     }
     
     
-    public static int kauppamatkustajaHeuristinen(int[][] verkko){
-        return 0;
+    // SOLMUJEN INDEXOINTI NOLLASTA!
+    // erikoistapaukset??
+    public static int[] kauppamatkustajaHeuristinen(int[][] verkko){    // IDEA: wikistä. IMPLEMENTAATIO: itse.
+        final int solmuja = verkko.length;  // Solmujen määrä verkossa.
+        
+        int[] parasReitti = new int[solmuja + 1];  // Lyhimmän reitin kulkemisohjeet, somusta 1 solmuun 1.
+        parasReitti[0] = 0;
+        parasReitti[solmuja] = 0;
+        int seuraavaPaa = 1;
+        int seuraavaHanta = solmuja - 1;
+        
+        HashSet<Integer> vierailtu = new HashSet<>(solmuja);
+        vierailtu.add(0);
+        
+        while(seuraavaPaa <= seuraavaHanta){
+            // Päätä lähin ei-vierailtu solmu.
+            int paataLahimmanEtaisyys = Integer.MAX_VALUE;
+            int paataLahinSolmu = -1;
+            
+            int paaSolmu = parasReitti[seuraavaPaa - 1];
+            int i = 0;
+            while(i < solmuja){  // Luuppi joka määrittää mikä solmu on pääsolmua lähimpänä.
+                //verkko[paaSolmu][]
+                if(!vierailtu.contains(i) && verkko[paaSolmu][i] < paataLahimmanEtaisyys){
+                    paataLahimmanEtaisyys = verkko[paaSolmu][i];
+                    paataLahinSolmu = i;
+                }
+                ++i;
+            }
+            
+            // Häntää lähin ei-vierailtu solmu.  // HUOM! mistä solmusta pienin etäisyys häntään.
+            int hantaaLahimmanEtaisyys = Integer.MAX_VALUE;
+            int hantaaLahinSolmu = -1;
+            
+            int hantaSolmu = parasReitti[seuraavaHanta + 1];
+            i = 0;                                   
+            while(i < solmuja){  // Luuppi joka määrittää mikä solmu on häntäsolmua lähimpänä.
+                //verkko[paaSolmu][]
+                if(!vierailtu.contains(i) && verkko[i][hantaSolmu] < hantaaLahimmanEtaisyys){
+                    hantaaLahimmanEtaisyys = verkko[i][hantaSolmu];
+                    hantaaLahinSolmu = i;
+                }
+                ++i;
+            }
+            
+            // Valitaan päätä ja häntää lähimmistä solmuista lähempi ja lisätään se reittiin.
+            if(paataLahimmanEtaisyys < hantaaLahimmanEtaisyys){
+                parasReitti[seuraavaPaa] = paataLahinSolmu;
+                ++seuraavaPaa;
+            } else{
+                parasReitti[seuraavaHanta] = hantaaLahinSolmu;
+                ++seuraavaHanta;
+            }
+        }
+        
+        return parasReitti;
     }
     
 }
