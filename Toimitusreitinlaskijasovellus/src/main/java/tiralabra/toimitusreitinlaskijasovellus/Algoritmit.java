@@ -60,7 +60,7 @@ public class Algoritmit {
      * (Ulomman taulukon indexi kertoo mistä solmusta kaari lähtee, 
      * sisemmän taulukon indexi kertoo mihin solmuun kaari menee,
      * sisemmän taulukon indexiä vastaava arvo kertoo kuinka pitkä kyseinen kaari on.)     etäisyysmatriisi!!!!!!!!!!!
-     * @return       seliseli!!!!!!!!!!!!!!!
+     * @return       
      */
     public static int kauppamatkustajaBruteForce(int[][] verkko){
         final int solmuja = verkko.length;  // Solmujen määrä verkossa.
@@ -93,12 +93,11 @@ public class Algoritmit {
     }
     
     
-    // SOLMUJEN INDEXOINTI NOLLASTA!
     // erikoistapaukset??
-    public static int[] kauppamatkustajaHeuristinen(int[][] verkko){    // IDEA: wikistä. IMPLEMENTAATIO: itse.
+    public static int[] kauppamatkustajaHeuristinen(int[][] verkko){    // IDEA: wikistä, lähin naapuri taktiikka. IMPLEMENTAATIO: itse.
         final int solmuja = verkko.length;  // Solmujen määrä verkossa.
         
-        int[] parasReitti = new int[solmuja + 1];  // Lyhimmän reitin kulkemisohjeet, somusta 1 solmuun 1.
+        int[] parasReitti = new int[solmuja + 1];  // Lyhimmän reitin kulkemisohjeet, somusta 0 solmuun 0.
         parasReitti[0] = 0;
         parasReitti[solmuja] = 0;
         int seuraavaPaa = 1;
@@ -107,7 +106,10 @@ public class Algoritmit {
         HashSet<Integer> vierailtu = new HashSet<>(solmuja);
         vierailtu.add(0);
         
+        // Luuppi joka lisää solmuja reitin päähän tai häntään, kunnes kaikki solmut on lisätty reittiin.
         while(seuraavaPaa <= seuraavaHanta){
+            
+            
             // Päätä lähin ei-vierailtu solmu.
             int paataLahimmanEtaisyys = Integer.MAX_VALUE;
             int paataLahinSolmu = -1;
@@ -123,7 +125,8 @@ public class Algoritmit {
                 ++i;
             }
             
-            // Häntää lähin ei-vierailtu solmu.  // HUOM! mistä solmusta pienin etäisyys häntään.
+            
+            // Häntää lähin ei-vierailtu solmu, eli mistä solmusta pienin etäisyys häntään.
             int hantaaLahimmanEtaisyys = Integer.MAX_VALUE;
             int hantaaLahinSolmu = -1;
             
@@ -138,13 +141,14 @@ public class Algoritmit {
                 ++i;
             }
             
+            
             // Valitaan päätä ja häntää lähimmistä solmuista lähempi ja lisätään se reittiin.
             if(paataLahimmanEtaisyys < hantaaLahimmanEtaisyys){
                 parasReitti[seuraavaPaa] = paataLahinSolmu;
                 ++seuraavaPaa;
             } else{
                 parasReitti[seuraavaHanta] = hantaaLahinSolmu;
-                ++seuraavaHanta;
+                --seuraavaHanta;
             }
         }
         

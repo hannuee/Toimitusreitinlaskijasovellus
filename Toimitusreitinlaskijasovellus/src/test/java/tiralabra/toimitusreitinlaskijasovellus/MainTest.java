@@ -4,6 +4,7 @@
  */
 package tiralabra.toimitusreitinlaskijasovellus;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -13,7 +14,7 @@ public class MainTest {
     // Kopioitu härskisti syksy 2017 TIRA_08_01 tehtävästä testiverkot e1-e4 kun
     // ei vielä ehditty tehdä omia testiverkkoja. (Ja vastaukset jotka pitäisi saada näillä testiverkoilla.)
     @Test
-    public void kauppamatkustajanReitinpituus(){
+    public void kauppamatkustajaBruteForceTestit(){
         int[][] e1={{0,3,2,1},
                     {3,0,4,2},
                     {2,4,0,4},
@@ -38,5 +39,27 @@ public class MainTest {
                     {3,5,6,0}};
         assertEquals(14, Algoritmit.kauppamatkustajaBruteForce(e4));
      }
+    
+    // Nämä testit tehty itse
+    @Test
+    public void kauppamatkustajaHeuristinenTestit(){
+        int[][] m1={{0,1,5,5},
+                    {5,5,5,5},
+                    {2,5,5,5},
+                    {5,5,1,5}};
+        assertArrayEquals(new int[]{0,1,3,2,0}, Algoritmit.kauppamatkustajaHeuristinen(m1));
+        
+        int[][] m2={{0,2,5,5},
+                    {5,5,5,5},
+                    {1,5,5,5},
+                    {5,5,1,5}};
+        assertArrayEquals(new int[]{0,1,3,2,0}, Algoritmit.kauppamatkustajaHeuristinen(m2));
+        
+        int[][] m3={{0,5,5,1},
+                    {5,5,3,5},
+                    {2,5,5,5},
+                    {2,5,5,5}};
+        assertArrayEquals(new int[]{0,3,1,2,0}, Algoritmit.kauppamatkustajaHeuristinen(m3));
+    }
     
 }
