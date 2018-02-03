@@ -7,13 +7,13 @@ package tiralabra.toimitusreitinlaskijasovellus;
 import org.junit.Assert;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.*;      // Testit joissa testataan vaan että kaikki solmut käyty läpi tasan kerran, random taulukkoja?
 
-public class MainTest {
+public class MainTest { 
     
     // Kopioitu härskisti syksy 2017 TIRA_08_01 tehtävästä testiverkot e1-e4 kun
     // ei vielä ehditty tehdä omia testiverkkoja. (Ja vastaukset jotka pitäisi saada näillä testiverkoilla.)
-    @Test
+    //@Test
     public void kauppamatkustajaBruteForceTestit(){
         int[][] e1={{0,3,2,1},
                     {3,0,4,2},
@@ -47,19 +47,19 @@ public class MainTest {
                     {5,5,5,5},
                     {2,5,5,5},
                     {5,5,1,5}};
-        assertArrayEquals(new int[]{0,1,3,2,0}, Algoritmit.kauppamatkustajaHeuristinen(m1));
+        assertArrayEquals(new int[]{0,1,3,2,0}, Algoritmit.kauppamatkustajaBruteForce(m1));
         
         int[][] m2={{0,2,5,5},
                     {5,5,5,5},
                     {1,5,5,5},
                     {5,5,1,5}};
-        assertArrayEquals(new int[]{0,1,3,2,0}, Algoritmit.kauppamatkustajaHeuristinen(m2));
+        assertArrayEquals(new int[]{0,1,3,2,0}, Algoritmit.kauppamatkustajaBruteForce(m2));
         
         int[][] m3={{0,5,5,1},
                     {5,5,3,5},
                     {2,5,5,5},
                     {2,5,5,5}};
-        assertArrayEquals(new int[]{0,3,1,2,0}, Algoritmit.kauppamatkustajaHeuristinen(m3));
+        assertArrayEquals(new int[]{0,3,1,2,0}, Algoritmit.kauppamatkustajaBruteForce(m3));
     }
     
 }
