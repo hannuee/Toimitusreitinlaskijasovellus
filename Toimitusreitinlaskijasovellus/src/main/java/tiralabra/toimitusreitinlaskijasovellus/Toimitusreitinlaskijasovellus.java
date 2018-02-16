@@ -6,20 +6,32 @@ package tiralabra.toimitusreitinlaskijasovellus;
 import com.google.maps.*;
 import com.google.maps.model.*;
 
+import tiralabra.algoritmit.*;
+
 public class Toimitusreitinlaskijasovellus {
     
     public static void main(String[] args) throws Exception{
         
-        System.out.println("Test");
+        // Todella suppea demo, karttademo tulossa ensiviikolla.
         
+        int[] vastaus = KauppamatkustajaDynaaminen.ratkaise(
+            new int[][]{        
+            {0, 96, 1, 5, 69},
+            {96, 0, 47, 1, 11},
+            {1, 47, 0, 77, 3},
+            {5, 1, 77, 0, 99},
+            {69, 11, 3, 99, 0}});
+        
+        System.out.println("Reitin alku");
+        for(int solmu : vastaus){
+            System.out.println("" + solmu);
+        }
+        System.out.println("Reitin loppu");
     }
     
-}
-
-//        // Matrix API
-//        
-//        String[] origins = {"Hämeenkatu 1, Tampere"};
-//        String[] destinations = {"Meiramikatu 30, Tampere", "Tampere-talo, Tampere"};
+//            // Google Distance Matrix API
+//        String[] origins = {"Tampere, Helsinki, Turku"};
+//        String[] destinations = {"Tampere, Helsinki, Turku"};
 //        
 //        GeoApiContext con = new GeoApiContext.Builder()
 //                .apiKey("AIzaSyDhVYlGKXdpop9BB5nSrZ-cUNVf_SpNR50")
@@ -40,3 +52,5 @@ public class Toimitusreitinlaskijasovellus {
 //                System.out.println("Aika: " + element.distance);
 //            }
 //        }
+    
+}

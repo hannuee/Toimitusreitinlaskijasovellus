@@ -20,7 +20,7 @@ public class KauppamatkustajaBruteForce {
      * @param verkko Verkko matriisimuodossa.
      * @see #kauppamatkustajaBruteForce(int[][] verkko)
      */
-    private static void kmBFrekursio(int pituus, int[] vierailtu, int nykyinen, int monessako, 
+    private static void rekursio(int pituus, int[] vierailtu, int nykyinen, int monessako, 
                                      int[] paras, int[] parasReitti, final int solmuja, int[][] verkko){
         if(monessako == solmuja){  // JOS ollaan vierailtu kaikissa solmuissa NIIN tämä rekursiohaara loppuu. 
             if(pituus + verkko[nykyinen][0] < paras[0]){  // JA JOS reitti on tähänastisista reiteistä lyhin huomioiden matka solmuun 1
@@ -39,10 +39,25 @@ public class KauppamatkustajaBruteForce {
             if(vierailtu[i] == 0 && pituus + verkko[nykyinen][i] < paras[0]){    
                 int[] vierailtu2 = vierailtu.clone();  // Kopioidaan vierailtu-taulukko uutta rekursiohaaraa varten.
                 vierailtu2[i] = monessako + 1;  // Merkitään seuraava vierailtava solmu vierailluksi vierailujärjestysnumerolla. 
-                kmBFrekursio(pituus + verkko[nykyinen][i], vierailtu2, i, monessako + 1, 
+                rekursio(pituus + verkko[nykyinen][i], vierailtu2, i, monessako + 1, 
                              paras, parasReitti, solmuja, verkko);
             }
         }
+    }
+    
+    private static int[] luoReittiOhjeet(int[] parasReitti){
+        int solmuja = parasReitti.length;
+        
+        // Luodaan reittiOhjetaulukko parasReitti-taulukon avulla.
+        int[] reittiOhjeet = new int[solmuja + 1];
+        int i = 0;
+        while(i < solmuja){
+            reittiOhjeet[parasReitti[i] - 1] = i;
+            ++i;
+        }
+        reittiOhjeet[solmuja] = 0;  // Lisätään loppuun vielä ohje lähtösolmuun paluusta.
+        
+        return reittiOhjeet;
     }
     
     // Pitkälti TIRA kalvon 390 mukaan, mutta muokattu ominaisuus joka muistaa lyhimmän reitin pituuden lisäki myös itse reitin.
@@ -78,19 +93,10 @@ public class KauppamatkustajaBruteForce {
         vierailtu[0] = 1;
         
         // Käydään rekursion avulla läpi reittivaihtoehdot.
-        kmBFrekursio(0, vierailtu, 0, 1, 
+        rekursio(0, vierailtu, 0, 1, 
                      paras, parasReitti, solmuja, verkko);
         
-        // Luodaan reittiOhjetaulukko parasReitti-taulukon avulla.
-        int[] reittiOhjeet = new int[solmuja + 1];
-        int i = 0;
-        while(i < solmuja){
-            reittiOhjeet[parasReitti[i] - 1] = i;
-            ++i;
-        }
-        reittiOhjeet[solmuja] = 0;  // Lisätään loppuun vielä ohje lähtösolmuun paluusta.
-        
-        return reittiOhjeet;
+        return luoReittiOhjeet(parasReitti);
     }
     
 }
