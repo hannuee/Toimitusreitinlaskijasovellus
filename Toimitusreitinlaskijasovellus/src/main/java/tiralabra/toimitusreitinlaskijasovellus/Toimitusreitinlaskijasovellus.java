@@ -3,54 +3,52 @@
  */
 package tiralabra.toimitusreitinlaskijasovellus;
 
-import com.google.maps.*;
-import com.google.maps.model.*;
-
 import tiralabra.algoritmit.*;
+import tiralabra.karttapalvelut.GoogleMaps;
 
 public class Toimitusreitinlaskijasovellus {
     
-    public static void main(String[] args) throws Exception{
+    public static void main(String[] args) throws Exception {
         
-        // Todella suppea demo, karttademo tulossa ensiviikolla.
+        String[] kierros = {
+        "Aleksanterinkatu 52, 00100 Helsinki",
+        "Kulosaarentie 40, 00570 Helsinki",
+        "Itäkatu 1-7, 00930 Helsinki",
+        "Kivikonlaita 5, 00940 Helsinki",
+        "Ratavallintie 1, 00720 Helsinki",
+        "Kantelettarentie 1, 00420 Helsinki",
+        "Tietokuja 1, 00330 Helsinki"
+        };
         
-        int[] vastaus = KauppamatkustajaDynaaminen.ratkaise(
-            new int[][]{        
-            {0, 96, 1, 5, 69},
-            {96, 0, 47, 1, 11},
-            {1, 47, 0, 77, 3},
-            {5, 1, 77, 0, 99},
-            {69, 11, 3, 99, 0}});
+        int[][] verkko = GoogleMaps.annaEtaisyysmatriisi(kierros);
+        int[] vastaus1 = KauppamatkustajaBruteForce.ratkaise(verkko);
+        int[] vastaus2 = KauppamatkustajaDynaaminen.ratkaise(verkko);
+        int[] vastaus3 = KauppamatkustajaHeuristinen.ratkaise(verkko);
         
         System.out.println("Reitin alku");
-        for(int solmu : vastaus){
-            System.out.println("" + solmu);
+        int i = 0;
+        while(i < vastaus1.length){
+            System.out.println(kierros[vastaus1[i]]);
+            ++i;
         }
         System.out.println("Reitin loppu");
+        System.out.println("------------------");
+        System.out.println("Reitin alku");
+        i = 0;
+        while(i < vastaus2.length){
+            System.out.println(kierros[vastaus2[i]]);
+            ++i;
+        }
+        System.out.println("Reitin loppu");
+        System.out.println("------------------");
+        System.out.println("Reitin alku");
+        i = 0;
+        while(i < vastaus3.length){
+            System.out.println(kierros[vastaus3[i]]);
+            ++i;
+        }
+        System.out.println("Reitin loppu");
+        
     }
-    
-//            // Google Distance Matrix API
-//        String[] origins = {"Tampere, Helsinki, Turku"};
-//        String[] destinations = {"Tampere, Helsinki, Turku"};
-//        
-//        GeoApiContext con = new GeoApiContext.Builder()
-//                .apiKey("AIzaSyDhVYlGKXdpop9BB5nSrZ-cUNVf_SpNR50")
-//                .build();
-//        
-//        DistanceMatrix matrix = DistanceMatrixApi.newRequest(con)
-//                .origins(origins)
-//                .destinations(destinations)
-//                .mode(TravelMode.DRIVING)
-//                .language("fi")
-//                .units(Unit.METRIC)
-//                .await();
-//        
-//        // Käydään tulos läpi ja tulostetaan.
-//        for(DistanceMatrixRow row : matrix.rows){
-//            for(DistanceMatrixElement element : row.elements){
-//                System.out.println("Aika: " + element.duration);
-//                System.out.println("Aika: " + element.distance);
-//            }
-//        }
-    
+ 
 }
