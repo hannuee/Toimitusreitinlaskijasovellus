@@ -35,7 +35,6 @@ public class Toimitusreitinlaskijasovellus {
             }
 
             System.out.println("" + req.queryParams("autocompletePiilossa1"));
-            System.out.println("MOIIIIIIIIIIIIIIIIIIII");
             
             res.redirect("/");
             return "";
