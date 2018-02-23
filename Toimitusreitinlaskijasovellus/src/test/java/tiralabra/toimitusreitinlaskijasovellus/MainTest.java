@@ -3,6 +3,7 @@
  */
 package tiralabra.toimitusreitinlaskijasovellus;
 
+import java.util.Arrays;
 import org.junit.Assert;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -104,6 +105,7 @@ public class MainTest {
     };
     
     
+    
     // Testifunktioiden testit:
     
     @Test
@@ -156,6 +158,7 @@ public class MainTest {
     }
     
     
+    
     // Varsinaisten algoritmien testit:
     
     @Test
@@ -192,7 +195,7 @@ public class MainTest {
     }
     
     @Test
-    public void BruteForceVsDynaaminenRandomVerkoilla(){
+    public void bruteForceVsDynaaminenRandomVerkoilla(){
         // Luuppi joka jokaisella kerralla arpoo aina yhden solmun verran suuremman
         // täydellisen symmetrisen verkon ja sitten testaa että kun tämä verkko
         // annetaan Brutelle ja Dynille niin onko vastaukset samat sekä käykö reitit
@@ -214,4 +217,43 @@ public class MainTest {
         }
     }
     
+    // Testi jolla selvitetty suurin mahdollinen verkon koko jolla KauppamatkustajaDynaaminen
+    // antaa vastauksen vielä kohtuullisessa ajassa:
+    // verkonKoko = 25 => ERROR Java heap space
+    // verkonKoko = 24 => 16.021 sec
+    // verkonKoko = 23 => 7.413 sec
+    // verkonKoko = 22 => 3.703 sec
+    // verkonKoko = 21 => 1.492 sec
+    // verkonKoko = 20 => 0.672 sec
+    @Test
+    public void kauppamatkustajaDynaaminenMaxVerkko(){
+        int verkonKoko = 20;
+
+        int[][] verkko = Testialgoritmit.verkonArpoja(verkonKoko, 87413867);
+
+        int[] vastaus = KauppamatkustajaDynaaminen.ratkaise(verkko);
+
+        boolean onkoReittiOK = Testialgoritmit.reitinTarkistaja(verkonKoko, vastaus);
+
+        assertTrue("Dyn Fail kun verkon koko " + verkonKoko, onkoReittiOK);
+    }
+    
+    // Testi jolla selvitetty suurin mahdollinen verkon koko jolla KauppamatkustajaBruteForce
+    // antaa vastauksen vielä kohtuullisessa ajassa:
+    // verkonKoko = 18 => 103.842 sec
+    // verkonKoko = 17 => 5.922 sec
+    // verkonKoko = 16 => 1.119 sec
+    // verkonKoko = 15 => 0.547 sec
+    @Test
+    public void kauppamatkustajaBruteForceMaxVerkko(){
+        int verkonKoko = 15;
+
+        int[][] verkko = Testialgoritmit.verkonArpoja(verkonKoko, 87413867);
+
+        int[] vastaus = KauppamatkustajaBruteForce.ratkaise(verkko);
+
+        boolean onkoReittiOK = Testialgoritmit.reitinTarkistaja(verkonKoko, vastaus);
+
+        assertTrue("Dyn Fail kun verkon koko " + verkonKoko, onkoReittiOK);
+    }
 }
