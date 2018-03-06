@@ -5,6 +5,7 @@ package tiralabra.toimitusreitinlaskijasovellus;
 
 import java.util.HashMap;  
 import java.util.Set;
+import java.util.ArrayList;
 
 import spark.ModelAndView;
 import static spark.Spark.*;
@@ -19,12 +20,15 @@ public class Toimitusreitinlaskijasovellus {
         
         // Pääsivu
         get("/", (req, res) -> {
+            int[] numerot = {1,2,3};
+            
             HashMap map = new HashMap<>();
+            map.put("numerot", numerot);
             
             return new ModelAndView(map, "index");
         }, new ThymeleafTemplateEngine());
         
-        // Raaka-aineen poistaminen
+        
         post("/naytaSijainnitKartalla", (req, res) -> {
             //req.queryParams("poistettavaRaakaAine")
             

@@ -12,7 +12,7 @@
         padding: 0;
         border: 0;
       }
-      div {
+      #ylapalkki {
         margin: 0;
         padding: 10px;
         border: 0;
@@ -30,111 +30,55 @@
         padding: 0;
         border: 0;
       }
+      p {
+        font-size: 14px;
+        color: #33cc00;
+        display:inline;
+      }
   </style>
 </head>
 <body>
   
     
-  <div>
+  <div id="ylapalkki">
     <h1>Toimitusreitinlaskija</h1>
   </div>
 
   <form method="post" action="/naytaSijainnitKartalla">
-    <input id="autocomplete1" placeholder="Lisää toimituskohde" type="text" />
-    <input id="autocompletePiilossa1" name="autocompletePiilossa1" value="" type="hidden" />
-    <input id="autocomplete2" placeholder="Lisää toimituskohde" type="text" />
-    <input id="autocompletePiilossa2" value="" type="hidden" />
-    <input id="autocomplete3" placeholder="Lisää toimituskohde" type="text" />
-    <input id="autocompletePiilossa3" value="" type="hidden" />
-    <input id="autocomplete4" placeholder="Lisää toimituskohde" type="text" />
-    <input id="autocompletePiilossa4" value="" type="hidden" />
-    <input id="autocomplete5" placeholder="Lisää toimituskohde" type="text" />
-    <input id="autocompletePiilossa5" value="" type="hidden" />
+   
+      <input id="autocompleteKentta1" placeholder="Lisää toimituskohde" type="text" /><p id="kenttaOK1">&nbsp;&nbsp;&#10004;</p><br/>
+    <input id="autocompletePiilossa1" name="autocompletePiilossa1" value="" />
+
     <button type="submit">Näytä sijainnit kartalla!</button>
   </form>
   
   <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDhVYlGKXdpop9BB5nSrZ-cUNVf_SpNR50&amp;libraries=places"></script>
   
   <!-- LÄHDE: https://developers.google.com/maps/documentation/javascript/examples/places-autocomplete-hotelsearch -->
-  <script> 
+  <script th:each="numero : ${numerot}" th:inline="text">
         var countryRestrict = {'country': 'fi'};
         
-        autocomplete1 = new google.maps.places.Autocomplete((
-              document.getElementById('autocomplete1')), {
-                   componentRestrictions: countryRestrict 
+        autocomplete[[${numero}]] = new google.maps.places.Autocomplete((
+              document.getElementById('autocompleteKentta[[${numero}]]')), {
+                   componentRestrictions: countryRestrict
               });
-        autocomplete1.addListener('place_changed', onPlaceChanged1);
+        autocomplete[[${numero}]].addListener('place_changed', onPlaceChanged[[${numero}]]);
+        document.getElementById('autocompleteKentta[[${numero}]]').addEventListener("input", cleaner[[${numero}]]);
+
         
-        autocomplete2 = new google.maps.places.Autocomplete((
-              document.getElementById('autocomplete2')), {
-                   componentRestrictions: countryRestrict 
-              });
-        autocomplete2.addListener('place_changed', onPlaceChanged2);
         
-        autocomplete3 = new google.maps.places.Autocomplete((
-              document.getElementById('autocomplete3')), {
-                   componentRestrictions: countryRestrict 
-              });
-        autocomplete3.addListener('place_changed', onPlaceChanged3);
-        
-        autocomplete4 = new google.maps.places.Autocomplete((
-              document.getElementById('autocomplete4')), {
-                   componentRestrictions: countryRestrict 
-              });
-        autocomplete4.addListener('place_changed', onPlaceChanged4);
-        
-        autocomplete5 = new google.maps.places.Autocomplete((
-              document.getElementById('autocomplete5')), {
-                   componentRestrictions: countryRestrict 
-              });
-        autocomplete5.addListener('place_changed', onPlaceChanged5);
-        
-        function onPlaceChanged1() {
-            var place = autocomplete1.getPlace();
+        function onPlaceChanged[[${numero}]]() {
+            var place = autocomplete[[${numero}]].getPlace();
             if (place.place_id) {
-              document.getElementById('autocompletePiilossa1').value = place.place_id;
+              document.getElementById('autocompletePiilossa[[${numero}]]').value = place.place_id;
             } else {
-              document.getElementById('autocomplete1').placeholder = 'Lisää toimituskohde';
+              document.getElementById('autocompleteKentta[[${numero}]]').placeholder = 'Lisää toimituskohde';
             }
         }
-        
-        function onPlaceChanged2() {
-            var place = autocomplete2.getPlace();
-            if (place.place_id) {
-              document.getElementById('autocompletePiilossa2').value = place.place_id;
-            } else {
-              document.getElementById('autocomplete2').placeholder = 'Lisää toimituskohde';
-            }
+        function cleaner[[${numero}]]() {
+            document.getElementById('autocompletePiilossa[[${numero}]]').value = "";
         }
-        
-        function onPlaceChanged3() {
-            var place = autocomplete3.getPlace();
-            if (place.place_id) {
-              document.getElementById('autocompletePiilossa3').value = place.place_id;
-            } else {
-              document.getElementById('autocomplete3').placeholder = 'Lisää toimituskohde';
-            }
-        }
-        
-        function onPlaceChanged4() {
-            var place = autocomplete4.getPlace();
-            if (place.place_id) {
-              document.getElementById('autocompletePiilossa4').value = place.place_id;
-            } else {
-              document.getElementById('autocomplete4').placeholder = 'Lisää toimituskohde';
-            }
-        }
-        
-        function onPlaceChanged5() {
-            var place = autocomplete5.getPlace();
-            if (place.place_id) {
-              document.getElementById('autocompletePiilossa5').value = place.place_id;
-            } else {
-              document.getElementById('autocomplete5').placeholder = 'Lisää toimituskohde';
-            }
-        }
-      
   </script>
-  
+  document.getElementById("myP").style.visibility = "hidden"; 
   </body>
   </html>
