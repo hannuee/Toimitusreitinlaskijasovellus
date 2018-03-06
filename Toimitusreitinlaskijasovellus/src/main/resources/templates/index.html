@@ -34,6 +34,7 @@
         font-size: 14px;
         color: #33cc00;
         display:inline;
+        visibility: hidden;
       }
   </style>
 </head>
@@ -44,20 +45,22 @@
     <h1>Toimitusreitinlaskija</h1>
   </div>
 
+  
   <form method="post" action="/naytaSijainnitKartalla">
-   
-    <input id="autocompleteKentta1" placeholder="Lisää toimituskohde" type="text" /><p id="kenttaOK1">&nbsp;&nbsp;&#10004;</p><br/>
-    <input id="autocompletePiilossa1" name="autocompletePiilossa1" value="" />
-
+    <div th:each="numero : ${numerot}" th:inline="text"> 
+        <input th:id="${'autocompleteKentta'}+${numero}" placeholder="Lisää toimituskohde" type="text" /><p th:id="${'kenttaOK'}+${numero}">&nbsp;&nbsp;&#10004;</p><br/>
+        <input th:id="${'autocompletePiilossa'}+${numero}" th:name="${'autocompletePiilossa'}+${numero}" value="" hidden="hidden" />  
+    </div>
     <button type="submit">Näytä sijainnit kartalla!</button>
   </form>
   
+    
+    
   <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDhVYlGKXdpop9BB5nSrZ-cUNVf_SpNR50&amp;libraries=places"></script>
   
   <!-- LÄHDE: https://developers.google.com/maps/documentation/javascript/examples/places-autocomplete-hotelsearch -->
   <script th:each="numero : ${numerot}" th:inline="text">
         
-        document.getElementById('kenttaOK[[${numero}]]').style.visibility = 'hidden';
         var countryRestrict = {'country': 'fi'};
         
         autocomplete[[${numero}]] = new google.maps.places.Autocomplete((
