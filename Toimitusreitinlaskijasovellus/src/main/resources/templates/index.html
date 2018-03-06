@@ -46,7 +46,7 @@
 
   <form method="post" action="/naytaSijainnitKartalla">
    
-      <input id="autocompleteKentta1" placeholder="Lisää toimituskohde" type="text" /><p id="kenttaOK1">&nbsp;&nbsp;&#10004;</p><br/>
+    <input id="autocompleteKentta1" placeholder="Lisää toimituskohde" type="text" /><p id="kenttaOK1">&nbsp;&nbsp;&#10004;</p><br/>
     <input id="autocompletePiilossa1" name="autocompletePiilossa1" value="" />
 
     <button type="submit">Näytä sijainnit kartalla!</button>
@@ -56,6 +56,8 @@
   
   <!-- LÄHDE: https://developers.google.com/maps/documentation/javascript/examples/places-autocomplete-hotelsearch -->
   <script th:each="numero : ${numerot}" th:inline="text">
+        
+        document.getElementById('kenttaOK[[${numero}]]').style.visibility = 'hidden';
         var countryRestrict = {'country': 'fi'};
         
         autocomplete[[${numero}]] = new google.maps.places.Autocomplete((
@@ -71,14 +73,18 @@
             var place = autocomplete[[${numero}]].getPlace();
             if (place.place_id) {
               document.getElementById('autocompletePiilossa[[${numero}]]').value = place.place_id;
+              document.getElementById('kenttaOK[[${numero}]]').style.visibility = 'visible'; 
             } else {
               document.getElementById('autocompleteKentta[[${numero}]]').placeholder = 'Lisää toimituskohde';
+              document.getElementById('kenttaOK[[${numero}]]').style.visibility = 'hidden';
             }
         }
+        
         function cleaner[[${numero}]]() {
             document.getElementById('autocompletePiilossa[[${numero}]]').value = "";
+            document.getElementById('kenttaOK[[${numero}]]').style.visibility = 'hidden';
         }
   </script>
-  document.getElementById("myP").style.visibility = "hidden"; 
+
   </body>
   </html>
