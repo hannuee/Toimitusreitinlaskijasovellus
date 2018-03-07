@@ -77,11 +77,12 @@ public class Toimitusreitinlaskijasovellus {
             
             
             HashMap map = new HashMap<>();
+            map.put("numerot", KENTTIEN_NUMEROT);
             map.put("start", toimituskohteet[vastausDyn[0]]);
             map.put("waypoints", waypoints);
             map.put("end", toimituskohteet[vastausDyn[vastausDyn.length-1]]);
             
-            return new ModelAndView(map, "kartta");
+            return new ModelAndView(map, "index");
         }, new ThymeleafTemplateEngine());
         
         
