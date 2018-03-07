@@ -23,6 +23,7 @@ public class Toimitusreitinlaskijasovellus {
         get("/", (req, res) -> {
             HashMap map = new HashMap<>();
             map.put("numerot", KENTTIEN_NUMEROT);
+            map.put("naytaReitti", false);
             
             return new ModelAndView(map, "index");
         }, new ThymeleafTemplateEngine());
@@ -78,6 +79,7 @@ public class Toimitusreitinlaskijasovellus {
             
             HashMap map = new HashMap<>();
             map.put("numerot", KENTTIEN_NUMEROT);
+            map.put("naytaReitti", true);
             map.put("start", toimituskohteet[vastausDyn[0]]);
             map.put("waypoints", waypoints);
             map.put("end", toimituskohteet[vastausDyn[vastausDyn.length-1]]);

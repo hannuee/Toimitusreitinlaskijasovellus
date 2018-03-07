@@ -21,6 +21,7 @@
         margin: 0;
         padding: 0;
         border: 0;
+        font-size: 25px;
         color: #ffffff;
       }
       h2 {
@@ -36,6 +37,17 @@
         visibility: hidden;
       }
       
+      
+      #vasenpalkki {
+        width: 25%;
+        display: inline;
+        float: left;
+        margin: 0;
+        padding: 0;
+        border: 0;
+        background-color: white;
+      }
+      
       #ylapalkki {
         margin: 0;
         padding: 10px;
@@ -43,18 +55,23 @@
         background-color: #ff9900;
       }
       
-      #vasen {
-        display: inline;
+      #lomake {
+        display: block;
+        float: left;
         margin: 0;
         padding: 0;
         border: 0;
-        background-color: #ff9900;
+        background-color: white;
       }
       
+
+      
+
+      
       #map {
-        height: 100%;
+        display: inline;
         float: right;
-        width: 70%;
+        width: 75%;
         height: 100%;
       }
   </style>
@@ -62,14 +79,14 @@
 <body>
   
     
-  <div id="vasen"></div>
     
-  <div id="ylapalkki">
-    <h1>Toimitusreitinlaskija</h1>
-  </div>
-
+   <div id="vasenpalkki">
+     <div id="ylapalkki">
+         <h1>Toimitusreitinlaskija</h1>
+     </div>
+       
   
-  <form method="post" action="/naytaSijainnitKartalla">
+  <form method="post" action="/naytaSijainnitKartalla" id="lomake">
     <div th:each="numero : ${numerot}" th:inline="text"> 
         <input th:id="${'autocompleteKentta'}+${numero}" placeholder="Lis&auml;&auml; toimituskohde" type="text" /><p th:id="${'kenttaOK'}+${numero}">&nbsp;&nbsp;&#10004;</p><br/>
         <input th:id="${'autocompletePiilossa'}+${numero}" th:name="${'autocompletePiilossa'}+${numero}" value="" hidden="hidden" />  
@@ -77,18 +94,22 @@
     <button type="submit">N&auml;yt&auml; sijainnit kartalla!</button>
   </form>
 
+  </div>
     
-<div id="map"></div>
+  
+  <div id="map"></div>
   
     
-<input type="submit" id="submit"></input> 
   
     
     
   
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDhVYlGKXdpop9BB5nSrZ-cUNVf_SpNR50&amp;signed_in=true&amp;libraries=places&amp;callback=initialize" async="async" defer="defer"></script>
   
-  <!-- LÄHDE: https://developers.google.com/maps/documentation/javascript/examples/places-autocomplete-hotelsearch -->
+  <!-- LÄHDE:https://stackoverflow.com/questions/36085722/using-initmap-and-initautocomplete-on-same-html-page-google-maps -->
+  
+  <!-- Autocomplete LÄHDE: https://developers.google.com/maps/documentation/javascript/examples/places-autocomplete-hotelsearch-->
+  <!-- Reitin piirtäminen kartalle LÄHDE: https://developers.google.com/maps/documentation/javascript/examples/directions-waypoints-->
   <script th:inline="javascript">
       
       function initialize() {
@@ -144,14 +165,14 @@
         var directionsService = new google.maps.DirectionsService;
         var directionsDisplay = new google.maps.DirectionsRenderer;
         var map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 6,
-          center: {lat: 41.85, lng: -87.65}
+          zoom: 10,
+          center: {lat: 60.170833, lng: 24.9375}
         });
         directionsDisplay.setMap(map);
 
-        document.getElementById('submit').addEventListener('click', function() {
-          calculateAndDisplayRoute(directionsService, directionsDisplay);
-        });
+        if([[${naytaReitti}]]){
+            calculateAndDisplayRoute(directionsService, directionsDisplay);
+        }
       }
 
 
