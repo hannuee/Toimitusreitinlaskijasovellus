@@ -3,9 +3,7 @@
  */
 package tiralabra.toimitusreitinlaskijasovellus;
 
-import java.util.HashMap;  
-import java.util.Set;
-import java.util.ArrayList;
+import java.util.HashMap;
 
 import spark.ModelAndView;
 import static spark.Spark.*;
@@ -16,33 +14,75 @@ import tiralabra.karttapalvelut.GoogleMaps;
 
 public class Toimitusreitinlaskijasovellus {
     
+    static final int[] KENTTIEN_NUMEROT = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19}; 
+    
     public static void main(String[] args) throws Exception {
         
-        // Pääsivu
+        
+        // Pääsivu.
         get("/", (req, res) -> {
-            int[] numerot = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19};
-            
             HashMap map = new HashMap<>();
-            map.put("numerot", numerot);
+            map.put("numerot", KENTTIEN_NUMEROT);
             
             return new ModelAndView(map, "index");
         }, new ThymeleafTemplateEngine());
         
         
+        // Käyttäjän lähettämän lomakkeen käsittely.
         post("/naytaSijainnitKartalla", (req, res) -> {
-            //req.queryParams("poistettavaRaakaAine")
-            
-            Set<String> setti = req.queryParams();
-            
-            for(String mjono : setti){
-                System.out.println(mjono);
+            // Lasketaan montako toimituskohdetta käyttäjä on syöttänyt.
+            int montakoKenttaa = 0;
+            for(int kentanNumero : KENTTIEN_NUMEROT){
+                String kentanSisalto = req.queryParams("autocompletePiilossa" + kentanNumero);
+                if(!kentanSisalto.isEmpty()){
+                    ++montakoKenttaa;
+                }
             }
-
-            System.out.println("" + req.queryParams("autocompletePiilossa1"));
             
-            res.redirect("/");
-            return "";
-        });
+            // Otetaan toimituskohteet talteen oikean kokoiseen taulukkoon.
+            String[] toimituskohteet = new String[montakoKenttaa];
+            int index = 0;
+            for(int kentanNumero : KENTTIEN_NUMEROT){
+                String kentanSisalto = req.queryParams("autocompletePiilossa" + kentanNumero);
+                if(!kentanSisalto.isEmpty()){
+                    toimituskohteet[index] = kentanSisalto;
+                    ++index;
+                }
+            }
+            
+            // Pyydetään Google Distance Matrix API:lta etäisyys jokaisen toimituskohdeparin välille.
+            int[][] verkko = GoogleMaps.annaEtaisyysmatriisi(toimituskohteet);
+
+            // Selvitetään lyhin toimitusreitti 3 eri tavalla.
+            // (BruteForcea ei käytetä jos toimituskohteita on enemmän kuin 15
+            //  koska algoritmi käy suurilla aineistoilla niin raskaaksi.)
+            int[] vastausBF = null;
+            if(toimituskohteet.length <= 15){
+                vastausBF = KauppamatkustajaBruteForce.ratkaise(verkko);
+            }
+            int[] vastausDyn = KauppamatkustajaDynaaminen.ratkaise(verkko);
+            int[] vastausHeur = KauppamatkustajaHeuristinen.ratkaise(verkko);
+            
+            
+            
+            // Näytetään dynaamisen vastaus:
+            String[] waypoints = new String[vastausDyn.length - 2];
+            int indexVastaus = 1;
+            int indexWaypoints = 0;
+            while(indexWaypoints < waypoints.length){
+                waypoints[indexWaypoints] = toimituskohteet[vastausDyn[indexVastaus]];
+                ++indexVastaus;
+                ++indexWaypoints;
+            }
+            
+            
+            HashMap map = new HashMap<>();
+            map.put("start", toimituskohteet[vastausDyn[0]]);
+            map.put("waypoints", waypoints);
+            map.put("end", toimituskohteet[vastausDyn[vastausDyn.length-1]]);
+            
+            return new ModelAndView(map, "kartta");
+        }, new ThymeleafTemplateEngine());
         
         
 //        String[] kierros = {

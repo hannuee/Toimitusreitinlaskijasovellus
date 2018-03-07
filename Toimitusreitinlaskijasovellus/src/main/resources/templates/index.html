@@ -1,7 +1,10 @@
 <!-- Käytetty pohjana tämän sivun luomisessa aiemmin tikape-kurssilla toteutettua sivua -->
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no"></meta>
+    <meta charset="utf-8"></meta>
   <title>Toimitusreitinlaskija</title>
   <style>
       * {
@@ -36,6 +39,49 @@
         display:inline;
         visibility: hidden;
       }
+      
+      
+      
+      #right-panel {
+        font-family: 'Roboto','sans-serif';
+        line-height: 30px;
+        padding-left: 10px;
+      }
+
+      #right-panel select, #right-panel input {
+        font-size: 15px;
+      }
+
+      #right-panel select {
+        width: 100%;
+      }
+
+      #right-panel i {
+        font-size: 12px;
+      }
+      
+      #map {
+        height: 100%;
+        float: left;
+        width: 70%;
+        height: 100%;
+      }
+      #right-panel {
+        margin: 20px;
+        border-width: 2px;
+        width: 20%;
+        height: 400px;
+        float: left;
+        text-align: left;
+        padding-top: 0;
+      }
+      #directions-panel {
+        margin-top: 10px;
+        background-color: #FFEE77;
+        padding: 10px;
+        overflow: scroll;
+        height: 174px;
+      }
   </style>
 </head>
 <body>
@@ -48,12 +94,12 @@
   
   <form method="post" action="/naytaSijainnitKartalla">
     <div th:each="numero : ${numerot}" th:inline="text"> 
-        <input th:id="${'autocompleteKentta'}+${numero}" placeholder="Lisää toimituskohde" type="text" /><p th:id="${'kenttaOK'}+${numero}">&nbsp;&nbsp;&#10004;</p><br/>
+        <input th:id="${'autocompleteKentta'}+${numero}" placeholder="Lis&auml;&auml; toimituskohde" type="text" /><p th:id="${'kenttaOK'}+${numero}">&nbsp;&nbsp;&#10004;</p><br/>
         <input th:id="${'autocompletePiilossa'}+${numero}" th:name="${'autocompletePiilossa'}+${numero}" value="" hidden="hidden" />  
     </div>
-    <button type="submit">Näytä sijainnit kartalla!</button>
+    <button type="submit">N&auml;yt&auml; sijainnit kartalla!</button>
   </form>
-  
+
     
     
   <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDhVYlGKXdpop9BB5nSrZ-cUNVf_SpNR50&amp;libraries=places"></script>
@@ -75,7 +121,7 @@
         function onPlaceChanged[[${numero}]]() {
             var place = autocomplete[[${numero}]].getPlace();
             if (place.place_id) {
-              document.getElementById('autocompletePiilossa[[${numero}]]').value = place.place_id;
+              document.getElementById('autocompletePiilossa[[${numero}]]').value = document.getElementById('autocompleteKentta[[${numero}]]').value;
               document.getElementById('kenttaOK[[${numero}]]').style.visibility = 'visible'; 
             } else {
               document.getElementById('autocompleteKentta[[${numero}]]').placeholder = 'Lisää toimituskohde';
@@ -88,6 +134,6 @@
             document.getElementById('kenttaOK[[${numero}]]').style.visibility = 'hidden';
         }
   </script>
-
+    
   </body>
   </html>
