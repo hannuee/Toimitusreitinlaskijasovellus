@@ -4,6 +4,7 @@
 package tiralabra.toimitusreitinlaskijasovellus;
 
 import java.util.HashMap;
+import java.util.Arrays;
 
 import spark.ModelAndView;
 import static spark.Spark.*;
@@ -31,6 +32,7 @@ public class Toimitusreitinlaskijasovellus {
         
         // Käyttäjän lähettämän lomakkeen käsittely.
         post("/naytaSijainnitKartalla", (req, res) -> {
+            
             // Lasketaan montako toimituskohdetta käyttäjä on syöttänyt.
             int montakoKenttaa = 0;
             for(int kentanNumero : KENTTIEN_NUMEROT){
@@ -53,16 +55,65 @@ public class Toimitusreitinlaskijasovellus {
             
             // Pyydetään Google Distance Matrix API:lta etäisyys jokaisen toimituskohdeparin välille.
             int[][] verkko = GoogleMaps.annaEtaisyysmatriisi(toimituskohteet);
+            
+            for(int[] rivi : verkko){
+                System.out.println(Arrays.toString(rivi));
+            }
 
+            
             // Selvitetään lyhin toimitusreitti 3 eri tavalla.
             // (BruteForcea ei käytetä jos toimituskohteita on enemmän kuin 15
             //  koska algoritmi käy suurilla aineistoilla niin raskaaksi.)
+            // Selvitetään samalla hieman statistiikkaa algoritmien suoriutumisesta.
             int[] vastausBF = null;
+            String kestoBF = "";
             if(toimituskohteet.length <= 15){
+                long alkuBF = System.nanoTime();
                 vastausBF = KauppamatkustajaBruteForce.ratkaise(verkko);
+                long loppuBF = System.nanoTime();
+                kestoBF = "BruteForce: " + ((loppuBF - alkuBF)/1000000000.0) + " sekuntia.";
             }
+            
+            long alkuDyn = System.nanoTime();
             int[] vastausDyn = KauppamatkustajaDynaaminen.ratkaise(verkko);
+            long loppuDyn = System.nanoTime();
+            String kestoDyn = "Dynaaminen: " + ((loppuDyn - alkuDyn)/1000000000.0) + " sekuntia.";
+            
+            long alkuHeur = System.nanoTime();
             int[] vastausHeur = KauppamatkustajaHeuristinen.ratkaise(verkko);
+            long loppuHeur = System.nanoTime();
+            String kestoHeur = "Heuristinen: " + ((loppuHeur - alkuHeur)/1000000000.0) + " sekuntia.";
+            
+            String BFvsDyn = "";
+            String DynVsHeur = "";
+            String DynVsHeurPituus = "";
+            if(vastausBF != null){
+                if(ReittienVertailija.ratkaise(vastausBF, vastausDyn)){
+                    BFvsDyn = "BruteForce ja Dynaaminen antoivat odotetusti saman vastauksen.";
+                    
+                    if(ReittienVertailija.ratkaise(vastausDyn, vastausHeur)){
+                        DynVsHeur = "Myös Heuristinen antoi saman vastauksen."; 
+                    } else {
+                        DynVsHeur = "Heuristinen antoi eri vastauksen.";
+                        DynVsHeurPituus = "Heuristisen antaman reitin ajallinen pituus on " + 
+                                (Reitinpituus.ratkaise(verkko, vastausHeur) / (1.0 * Reitinpituus.ratkaise(verkko, vastausDyn))) * 100 +
+                                "% verrattuna BruteForcen ja Dynaamisen antaman reitin pituuteen.";
+                    }
+                } else {
+                    BFvsDyn = "Jokin meni pieleen, BruteForce ja Dynaaminen antoivat eri vastaukset.";
+                }
+            } else {
+                if(ReittienVertailija.ratkaise(vastausDyn, vastausHeur)){
+                    DynVsHeur = "Heuristinen antoi saman vastauksen."; 
+                } else {
+                    DynVsHeur = "Heuristinen antoi eri vastauksen.";
+                    DynVsHeurPituus = "Heuristisen antaman reitin ajallinen pituus on " + 
+                            (1.0*Reitinpituus.ratkaise(verkko, vastausHeur) / (1.0*Reitinpituus.ratkaise(verkko, vastausDyn))) * 100.00 +
+                            "% verrattuna Dynaamisen antamaan reitin pituuteen.";
+                }
+            }
+            
+            String[] kaikkiVertailutYhdessa = {kestoBF, kestoDyn, kestoHeur, BFvsDyn, DynVsHeur, DynVsHeurPituus};
             
             
             
@@ -83,6 +134,7 @@ public class Toimitusreitinlaskijasovellus {
             map.put("start", toimituskohteet[vastausDyn[0]]);
             map.put("waypoints", waypoints);
             map.put("end", toimituskohteet[vastausDyn[vastausDyn.length-1]]);
+            map.put("statistiikat", kaikkiVertailutYhdessa);
             
             return new ModelAndView(map, "index");
         }, new ThymeleafTemplateEngine());

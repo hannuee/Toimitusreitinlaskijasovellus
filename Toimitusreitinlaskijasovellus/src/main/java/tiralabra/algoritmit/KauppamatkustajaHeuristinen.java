@@ -6,6 +6,14 @@ package tiralabra.algoritmit;
 public class KauppamatkustajaHeuristinen {
     
     public static int[] ratkaise(int[][] verkko){    // IDEA: wikistä, lähin naapuri taktiikka. IMPLEMENTAATIO: itse.
+        // Erikoistapaukset:
+        if(verkko.length == 1){
+            return new int[]{0};
+        }
+        else if(verkko.length == 2){
+            return new int[]{0,1,0};
+        }
+        
         final int solmuja = verkko.length;  // Solmujen määrä verkossa.
         
         

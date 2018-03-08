@@ -30,12 +30,13 @@
         padding: 0;
         border: 0;
       }
-      p {
+      .piilossa {
         font-size: 14px;
         color: #33cc00;
         display:inline;
         visibility: hidden;
-      }
+      }    
+      
       
       
       #vasenpalkki {
@@ -48,7 +49,9 @@
         background-color: white;
       }
       
+      
       #ylapalkki {
+        display: block;
         margin: 0;
         padding: 10px;
         border: 0;
@@ -63,11 +66,10 @@
         border: 0;
         background-color: white;
       }
+     
+      
       
 
-      
-
-      
       #map {
         display: inline;
         float: right;
@@ -88,12 +90,21 @@
   
   <form method="post" action="/naytaSijainnitKartalla" id="lomake">
     <div th:each="numero : ${numerot}" th:inline="text"> 
-        <input th:id="${'autocompleteKentta'}+${numero}" placeholder="Lis&auml;&auml; toimituskohde" type="text" /><p th:id="${'kenttaOK'}+${numero}">&nbsp;&nbsp;&#10004;</p><br/>
+        <input th:id="${'autocompleteKentta'}+${numero}" placeholder="Lis&auml;&auml; toimituskohde" type="text" /><p class="piilossa" th:id="${'kenttaOK'}+${numero}">&nbsp;&nbsp;&#10004;</p><br/>
         <input th:id="${'autocompletePiilossa'}+${numero}" th:name="${'autocompletePiilossa'}+${numero}" value="" hidden="hidden" />  
     </div>
     <button type="submit">N&auml;yt&auml; sijainnit kartalla!</button>
   </form>
-
+       
+       
+       
+       
+       <div>
+       <th:block th:each="statistiikka : ${statistiikat}">
+           <p th:text="${statistiikka}"></p><br/>
+       </th:block>
+       </div>
+       
   </div>
     
   

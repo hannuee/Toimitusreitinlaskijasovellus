@@ -18,10 +18,10 @@ public class Testialgoritmit {
         Random arpoja = new Random(seed);
         
         int[][] verkko = new int[solmuja][solmuja];
-        // Verkon kaikki aliot 0:ksi.
+        // Verkon kaikki aliot -1:ksi.
         for(int index = 0; index < solmuja; ++index){
             for(int index2 = 0; index2 < solmuja; ++index2){
-                verkko[index][index2] = 0;
+                verkko[index][index2] = -1;
             }
         }
         
@@ -30,11 +30,11 @@ public class Testialgoritmit {
             int i2 = 0;
             while(i2 < solmuja){
                 if(i == i2){  // Koska etäisyys jostakin solmusta itseensä on 0.
-                    
-                } else if(verkko[i][i2] == 0 && verkko[i2][i] != 0){
-                    verkko[i][i2] = verkko[i2][i];
-                } else if(verkko[i][i2] == 0 && verkko[i2][i] == 0) {
-                    verkko[i][i2] = arpoja.nextInt(1000) + 1;
+                    verkko[i][i2] = 0;
+                } else if(verkko[i][i2] == -1){
+                    int et = arpoja.nextInt(1000) + 1;
+                    verkko[i][i2] = et;
+                    verkko[i2][i] = et;
                 }
                 ++i2;
             }
@@ -92,51 +92,6 @@ public class Testialgoritmit {
         }
         
         return true;
-    }
-    
-    public static int reitinPituudenLaskija(int[][] verkko, int[] vastaus){
-        int reitinPituus = 0;
-        
-        int mista = 0;
-        int mihin = 1;
-        while(mihin < vastaus.length){
-            reitinPituus += verkko[vastaus[mista]][vastaus[mihin]];
-            ++mista;
-            ++mihin;
-        }
-        
-        return reitinPituus;
-    }
-    
-    /**
-     * Tarkistaa ovatko annetut taulukot täsmälleen samanlaisia tai toistensa peilikuvia
-     * vai ovatko taulukot täysin erilaisia.
-     * @param taulukko1
-     * @param taulukko2
-     * @return Palauttaa <code>true</code> jos annetut taulukot ovat täsmälleen samanlaisia tai toistensa peilikuvia,
-     * muuten <code>false</code>.
-     */
-    public static boolean ovatkoTaulukotSymmetriset(int[] taulukko1, int[] taulukko2){
-        if(taulukko1.length != taulukko2.length){
-            return false;
-        }
-        
-        boolean samanlaiset = true;
-        boolean samanlaisetPeilina = true;
-        int i = 0;
-        int i2 = taulukko1.length - 1;
-        while(i < taulukko1.length){
-            if(taulukko1[i] != taulukko2[i]){ 
-                samanlaiset = false;
-            }
-            if(taulukko1[i] != taulukko2[i2]){ 
-                samanlaisetPeilina = false;
-            }
-            ++i;
-            --i2;
-        }
-        
-        return samanlaiset || samanlaisetPeilina;
     }
     
     

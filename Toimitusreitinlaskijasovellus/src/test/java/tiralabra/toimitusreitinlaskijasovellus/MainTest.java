@@ -3,7 +3,6 @@
  */
 package tiralabra.toimitusreitinlaskijasovellus;
 
-import java.util.Arrays;
 import org.junit.Assert;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -151,22 +150,22 @@ public class MainTest {
     }  
     
     @Test
-    public void ovatkoTaulukotSymmetrisetFunktionTestit(){
-        assertTrue(Testialgoritmit.ovatkoTaulukotSymmetriset(new int[]{0, 1, 2, 3, 0}, new int[]{0, 1, 2, 3, 0}));
-        assertTrue(Testialgoritmit.ovatkoTaulukotSymmetriset(new int[]{0, 1, 2, 3, 0}, new int[]{0, 3, 2, 1, 0}));
-        assertFalse(Testialgoritmit.ovatkoTaulukotSymmetriset(new int[]{0, 1, 2, 3, 0}, new int[]{0, 1, 2, 1, 0}));
+    public void reittienVertailijanTestit(){
+        assertTrue(ReittienVertailija.ratkaise(new int[]{0, 1, 2, 3, 0}, new int[]{0, 1, 2, 3, 0}));
+        assertTrue(ReittienVertailija.ratkaise(new int[]{0, 1, 2, 3, 0}, new int[]{0, 3, 2, 1, 0}));
+        assertFalse(ReittienVertailija.ratkaise(new int[]{0, 1, 2, 3, 0}, new int[]{0, 1, 2, 1, 0}));
     }
     
     
     
-    // Varsinaisten algoritmien testit:
+    // Pääalgoritmien testit:
     
     @Test
     public void kauppamatkustajaBruteForceTestit(){
         
         for(Testiverkko verkko : TESTIVERKOT){
             int[] vastaus = KauppamatkustajaBruteForce.ratkaise(verkko.getVerkko());
-            boolean vastaakoMallivastausta = Testialgoritmit.ovatkoTaulukotSymmetriset(verkko.getReittiOhjeet(), vastaus);
+            boolean vastaakoMallivastausta = ReittienVertailija.ratkaise(verkko.getReittiOhjeet(), vastaus);
             Assert.assertTrue("FAIL BruteForce Verkko ID " + verkko.getId(), vastaakoMallivastausta);
         }
 
@@ -177,7 +176,7 @@ public class MainTest {
         
         for(Testiverkko verkko : TESTIVERKOT){
             int[] vastaus = KauppamatkustajaDynaaminen.ratkaise(verkko.getVerkko());
-            boolean vastaakoMallivastausta = Testialgoritmit.ovatkoTaulukotSymmetriset(verkko.getReittiOhjeet(), vastaus);
+            boolean vastaakoMallivastausta = ReittienVertailija.ratkaise(verkko.getReittiOhjeet(), vastaus);
             Assert.assertTrue("FAIL Dynaaminen Verkko ID " + verkko.getId(), vastaakoMallivastausta);
         }
         
@@ -188,7 +187,7 @@ public class MainTest {
         
         for(Testiverkko verkko : TESTIVERKOT){
             int[] vastaus = KauppamatkustajaHeuristinen.ratkaise(verkko.getVerkko());
-            boolean vastaakoMallivastausta = Testialgoritmit.ovatkoTaulukotSymmetriset(verkko.getReittiOhjeet(), vastaus);
+            boolean vastaakoMallivastausta = ReittienVertailija.ratkaise(verkko.getReittiOhjeet(), vastaus);
             Assert.assertTrue("FAIL Heuristinen Verkko ID " + verkko.getId(), vastaakoMallivastausta);
         }
         
@@ -209,7 +208,7 @@ public class MainTest {
             
             boolean onkoReitti1OK = Testialgoritmit.reitinTarkistaja(verkonKoko, vastaus1);
             boolean onkoReitti2OK = Testialgoritmit.reitinTarkistaja(verkonKoko, vastaus2);
-            boolean ovatkoSamaReitti = Testialgoritmit.ovatkoTaulukotSymmetriset(vastaus1, vastaus2);
+            boolean ovatkoSamaReitti = ReittienVertailija.ratkaise(vastaus1, vastaus2);
             
             assertTrue("Brute Fail kun verkon koko " + verkonKoko, onkoReitti1OK);
             assertTrue("Dyn Fail kun verkon koko " + verkonKoko, onkoReitti2OK);
@@ -255,5 +254,29 @@ public class MainTest {
         boolean onkoReittiOK = Testialgoritmit.reitinTarkistaja(verkonKoko, vastaus);
 
         assertTrue("Dyn Fail kun verkon koko " + verkonKoko, onkoReittiOK);
+    }
+    
+    
+    // Suorituskykytestit:
+    
+    @Test
+    public void suorituskykyTestit(){
+        
+        for(int verkonKoko = 2; verkonKoko <= 16; ++verkonKoko){
+            System.out.println("Verkon koko: " + verkonKoko);
+            
+            for(int siemen = 1; siemen <= 10; ++siemen){
+                int[][] verkko = Testialgoritmit.verkonArpoja(verkonKoko, 87413850+siemen);
+                
+                long alku = System.nanoTime();
+                int[] vastaus = KauppamatkustajaBruteForce.ratkaise(verkko);
+                long loppu = System.nanoTime();
+                System.out.println("" + (loppu - alku));
+                
+                boolean onkoReittiOK = Testialgoritmit.reitinTarkistaja(verkonKoko, vastaus);
+                assertTrue("Dyn Fail kun verkon koko " + verkonKoko, onkoReittiOK);
+            }
+        }
+        
     }
 }

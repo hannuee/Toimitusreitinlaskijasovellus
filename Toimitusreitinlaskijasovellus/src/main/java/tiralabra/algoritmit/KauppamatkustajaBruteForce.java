@@ -73,9 +73,17 @@ public class KauppamatkustajaBruteForce {
      * sisemmän taulukon indexi kertoo mihin solmuun kaari menee,
      * sisemmän taulukon indexiä vastaava arvo kertoo kuinka pitkä kyseinen suunnattu kaari on.)
      * @return Taulukko jossa ensimmäinen alkio kertoo lähtösolmun ja loput taulukon alkiot
-     * kertovat solmun mihin taulukon edellisen alkion viittaamasta solmusta tulee edetä.
+     * kertovat solmun mihin taulukon edellisen alkion solmusta tulee edetä.
      */
     public static int[] ratkaise(int[][] verkko){
+        // Erikoistapaukset:
+        if(verkko.length == 1){
+            return new int[]{0};
+        }
+        else if(verkko.length == 2){
+            return new int[]{0,1,0};
+        }
+        
         final int solmuja = verkko.length;  // Solmujen määrä verkossa.
 
         int[] paras = {Integer.MAX_VALUE};  // Lyhimmän reitin pituus.

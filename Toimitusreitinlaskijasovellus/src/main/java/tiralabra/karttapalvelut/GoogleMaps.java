@@ -35,7 +35,7 @@ public class GoogleMaps {
         int[][] verkko = new int[solmuja][solmuja];
         for(int index = 0; index < solmuja; ++index){
             for(int index2 = 0; index2 < solmuja; ++index2){
-                verkko[index][index2] = 0;
+                verkko[index][index2] = -1;
             }
         }
         
@@ -44,11 +44,11 @@ public class GoogleMaps {
             int i2 = 0;
             while(i2 < solmuja){
                 if(i == i2){  // Koska etäisyys jostakin solmusta itseensä on 0.
-                    
-                } else if(verkko[i][i2] == 0 && verkko[i2][i] != 0){
-                    verkko[i][i2] = verkko[i2][i];
-                } else if(verkko[i][i2] == 0 && verkko[i2][i] == 0) {
-                    verkko[i][i2] = etaisyys(solmut[i], solmut[i2]);
+                    verkko[i][i2] = 0;
+                } else if(verkko[i][i2] == -1){
+                    int et = etaisyys(solmut[i], solmut[i2]);
+                    verkko[i][i2] = et;
+                    verkko[i2][i] = et;
                 }
                 ++i2;
             }

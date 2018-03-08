@@ -104,6 +104,14 @@ public class KauppamatkustajaDynaaminen {
     // Otettu mallia:
     // https://www.quora.com/Are-there-any-good-examples-of-the-Held-Karp-algorithm-in-C++-Hard-to-find-example-code-to-solve-the-traveling-salesman-problem-Everyone-wants-to-just-talk-about-theory-and-not-show-how-to-actually-do-it-What-is-the-big-secret
     public static int[] ratkaise(int[][] verkko){
+        // Erikoistapaukset:
+        if(verkko.length == 1){
+            return new int[]{0};
+        }
+        else if(verkko.length == 2){
+            return new int[]{0,1,0};
+        }
+        
         final int solmuja = verkko.length;  // Solmujen määrä verkossa.
         
         int[][] paras = new int[1<<(solmuja - 1)][solmuja];
