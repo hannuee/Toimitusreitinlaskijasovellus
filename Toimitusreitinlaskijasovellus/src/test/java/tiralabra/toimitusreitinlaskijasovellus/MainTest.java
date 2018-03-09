@@ -256,7 +256,9 @@ public class MainTest {
         assertTrue("Dyn Fail kun verkon koko " + verkonKoko, onkoReittiOK);
     }
     
+    
     // Heuristisen reitinpituus verrattuna parhaaseen reittiin:
+    
     //@Test
     public void reitinPituudenEroDynaaminenVsHeuristinen(){
         for(int verkonKoko = 2; verkonKoko <= 20; ++verkonKoko){
