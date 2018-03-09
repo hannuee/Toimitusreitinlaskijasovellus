@@ -256,13 +256,35 @@ public class MainTest {
         assertTrue("Dyn Fail kun verkon koko " + verkonKoko, onkoReittiOK);
     }
     
+    // Heuristisen reitinpituus verrattuna parhaaseen reittiin:
+    //@Test
+    public void reitinPituudenEroDynaaminenVsHeuristinen(){
+        for(int verkonKoko = 2; verkonKoko <= 20; ++verkonKoko){
+            System.out.println("Verkon koko: " + verkonKoko);
+            
+            for(int siemen = 1; siemen <= 10; ++siemen){
+                int[][] verkko = Testialgoritmit.verkonArpoja(verkonKoko, 87413850+siemen);
+                
+                int[] vastausDyn = KauppamatkustajaDynaaminen.ratkaise(verkko);
+                int[] vastausHeur = KauppamatkustajaHeuristinen.ratkaise(verkko);
+                
+                System.out.println("" + (( (1.0*Reitinpituus.ratkaise(verkko, vastausHeur)) / (1.0*Reitinpituus.ratkaise(verkko, vastausDyn)) ) * 100.00) );
+                
+                boolean onkoReittiOkDyn = Testialgoritmit.reitinTarkistaja(verkonKoko, vastausDyn);
+                boolean onkoReittiOkHeur = Testialgoritmit.reitinTarkistaja(verkonKoko, vastausHeur);
+                assertTrue("Dyn Fail kun verkon koko " + verkonKoko, onkoReittiOkDyn);
+                assertTrue("Heur Fail kun verkon koko " + verkonKoko, onkoReittiOkHeur);
+            }
+        }
+    }
     
+   
     // Suorituskykytestit:
     
-    @Test
-    public void suorituskykyTestit(){
+    //@Test
+    public void suorituskykyTestitBruteForce(){
         
-        for(int verkonKoko = 2; verkonKoko <= 16; ++verkonKoko){
+        for(int verkonKoko = 2; verkonKoko <= 15; ++verkonKoko){
             System.out.println("Verkon koko: " + verkonKoko);
             
             for(int siemen = 1; siemen <= 10; ++siemen){
@@ -270,6 +292,48 @@ public class MainTest {
                 
                 long alku = System.nanoTime();
                 int[] vastaus = KauppamatkustajaBruteForce.ratkaise(verkko);
+                long loppu = System.nanoTime();
+                System.out.println("" + (loppu - alku));
+                
+                boolean onkoReittiOK = Testialgoritmit.reitinTarkistaja(verkonKoko, vastaus);
+                assertTrue("Dyn Fail kun verkon koko " + verkonKoko, onkoReittiOK);
+            }
+        }
+        
+    }
+    
+    //@Test
+    public void suorituskykyTestitDynaaminen(){
+        
+        for(int verkonKoko = 2; verkonKoko <= 20; ++verkonKoko){
+            System.out.println("Verkon koko: " + verkonKoko);
+            
+            for(int siemen = 1; siemen <= 10; ++siemen){
+                int[][] verkko = Testialgoritmit.verkonArpoja(verkonKoko, 87413850+siemen);
+                
+                long alku = System.nanoTime();
+                int[] vastaus = KauppamatkustajaDynaaminen.ratkaise(verkko);
+                long loppu = System.nanoTime();
+                System.out.println("" + (loppu - alku));
+                
+                boolean onkoReittiOK = Testialgoritmit.reitinTarkistaja(verkonKoko, vastaus);
+                assertTrue("Dyn Fail kun verkon koko " + verkonKoko, onkoReittiOK);
+            }
+        }
+        
+    }
+    
+    //@Test
+    public void suorituskykyTestitHeuristinen(){
+        
+        for(int verkonKoko = 2; verkonKoko <= 30; ++verkonKoko){
+            System.out.println("Verkon koko: " + verkonKoko);
+            
+            for(int siemen = 1; siemen <= 10; ++siemen){
+                int[][] verkko = Testialgoritmit.verkonArpoja(verkonKoko, 87413850+siemen);
+                
+                long alku = System.nanoTime();
+                int[] vastaus = KauppamatkustajaHeuristinen.ratkaise(verkko);
                 long loppu = System.nanoTime();
                 System.out.println("" + (loppu - alku));
                 

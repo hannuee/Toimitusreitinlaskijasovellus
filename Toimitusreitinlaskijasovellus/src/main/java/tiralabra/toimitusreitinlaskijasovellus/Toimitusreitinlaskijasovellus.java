@@ -96,7 +96,7 @@ public class Toimitusreitinlaskijasovellus {
                     } else {
                         DynVsHeur = "Heuristinen antoi eri vastauksen.";
                         DynVsHeurPituus = "Heuristisen antaman reitin ajallinen pituus on " + 
-                                (Reitinpituus.ratkaise(verkko, vastausHeur) / (1.0 * Reitinpituus.ratkaise(verkko, vastausDyn))) * 100 +
+                                (( (1.0*Reitinpituus.ratkaise(verkko, vastausHeur)) / (1.0*Reitinpituus.ratkaise(verkko, vastausDyn))) * 100.00) +
                                 "% verrattuna BruteForcen ja Dynaamisen antaman reitin pituuteen.";
                     }
                 } else {
@@ -108,7 +108,7 @@ public class Toimitusreitinlaskijasovellus {
                 } else {
                     DynVsHeur = "Heuristinen antoi eri vastauksen.";
                     DynVsHeurPituus = "Heuristisen antaman reitin ajallinen pituus on " + 
-                            (1.0*Reitinpituus.ratkaise(verkko, vastausHeur) / (1.0*Reitinpituus.ratkaise(verkko, vastausDyn))) * 100.00 +
+                            (( (1.0*Reitinpituus.ratkaise(verkko, vastausHeur)) / (1.0*Reitinpituus.ratkaise(verkko, vastausDyn))) * 100.00) +
                             "% verrattuna Dynaamisen antamaan reitin pituuteen.";
                 }
             }
