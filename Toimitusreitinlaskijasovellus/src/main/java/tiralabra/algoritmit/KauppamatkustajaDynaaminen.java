@@ -6,6 +6,12 @@ package tiralabra.algoritmit;
 public class KauppamatkustajaDynaaminen {
     
     // Tämä toteutettu itse, ei sisältynyt pääalgoritmin lähteeseen.
+    /**
+     * Luo reittiohjetaulukon selvittämällä lyhyimmän reitin dynaamisen ohjelmoinnin taulukosta.
+     * @param paras Dynaamisen ohjelmoinnin taulukko.
+     * @param verkko Verkko jonka lyhintä reittiä ollaan selvittämässä.
+     * @return reittiohje-taulukko.
+     */
     private static int[] luoReittiOhjeet(int[][] paras, int[][] verkko){  
         // Reittiohjeiden selvittäminen Dynaamisen reittitaulukon "paras" avulla.
         // Lähdetään siis rakentamaan lyhimmän reitin ohjeita alkaen viimeisestä solmusta ennen loppusolmua
@@ -65,9 +71,14 @@ public class KauppamatkustajaDynaaminen {
     }
     
     // Tämäkin toteutettu itse, ei sisältynyt pääalgoritmin lähteeseen.
-    // Koska käytetty pääalgoritmi muodostaa lyhimmän reitin lähtien ja palaten
-    // viimeiseisestä solmusta mutta halutaan lyhin reitti alkaen ja palaten
-    // ensimmäisestä solmusta niin muutetaan reittiohjetaulukkoa.
+    /**
+     * Koska käytetty pääalgoritmi muodostaa lyhimmän reitin lähtien ja palaten
+     * viimeiseisestä solmusta mutta halutaan lyhin reitti alkaen ja palaten
+     * ensimmäisestä solmusta niin muutetaan reittiohjetaulukkoa.
+     * @param reittiOhjeet reittiohje-taulukko.
+     * @param verkko Verkko jonka lyhintä reittiä ollaan selvittämässä.
+     * @return reittiohje-taulukko.
+     */
     private static int[] muunnaReittiOhjeet(int[] reittiOhjeet, int[][] verkko){
         int solmuja = verkko.length;
         
@@ -103,6 +114,11 @@ public class KauppamatkustajaDynaaminen {
     // Kommentointi vielä hieman kesken.
     // Otettu mallia:
     // https://www.quora.com/Are-there-any-good-examples-of-the-Held-Karp-algorithm-in-C++-Hard-to-find-example-code-to-solve-the-traveling-salesman-problem-Everyone-wants-to-just-talk-about-theory-and-not-show-how-to-actually-do-it-What-is-the-big-secret
+    /**
+     * Selvittää lyhimmän reitin symmetrisessä verkossa käyttäen hyväksi dynaamista ohjelmointia.
+     * @param verkko Verkko matriisimuodossa.
+     * @return reittiohje-taulukko.
+     */
     public static int[] ratkaise(int[][] verkko){
         // Erikoistapaukset:
         if(verkko.length == 1){
@@ -114,7 +130,7 @@ public class KauppamatkustajaDynaaminen {
         
         final int solmuja = verkko.length;  // Solmujen määrä verkossa.
         
-        int[][] paras = new int[1<<(solmuja - 1)][solmuja];
+        int[][] paras = new int[1<<(solmuja - 1)][solmuja];  // Dynaamisen ohjelmoinnin taulukko.
         int i = 0;
         while(i < (1<<(solmuja - 1))){
             int i2 = 0;
@@ -125,6 +141,7 @@ public class KauppamatkustajaDynaaminen {
             ++i;
         }
         
+        // Dynaamisen ohjelmoinnin luuppi.
         for(int vierailtu = 1; vierailtu < (1<<(solmuja - 1)); ++vierailtu){
             for(int viimeinen = 0; viimeinen < (solmuja - 1); ++viimeinen){
                 

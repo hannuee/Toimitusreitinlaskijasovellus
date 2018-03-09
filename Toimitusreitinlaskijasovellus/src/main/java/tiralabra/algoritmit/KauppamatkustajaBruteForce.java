@@ -45,6 +45,11 @@ public class KauppamatkustajaBruteForce {
         }
     }
     
+    /**
+     * Luo reittiohjetaulukon parasReitti-taulukon perusteella.
+     * @param parasReitti eli lyhimmän löydetyn reitin vierailtu-taulukko.
+     * @return reittiohje-taulukko.
+     */
     private static int[] luoReittiOhjeet(int[] parasReitti){
         int solmuja = parasReitti.length;
         

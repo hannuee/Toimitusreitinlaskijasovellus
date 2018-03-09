@@ -10,8 +10,8 @@ public class GoogleMaps {
     
     private static int etaisyys(String mista, String mihin) throws Exception {
         // Google Distance Matrix API
-        String[] origins = {mista};
-        String[] destinations = {mihin};
+        String[] origins = {"place_id:" + mista};
+        String[] destinations = {"place_id:" + mihin};
         
         GeoApiContext con = new GeoApiContext.Builder()
                 .apiKey("AIzaSyDhVYlGKXdpop9BB5nSrZ-cUNVf_SpNR50")

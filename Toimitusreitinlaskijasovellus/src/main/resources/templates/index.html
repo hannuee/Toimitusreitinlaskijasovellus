@@ -36,6 +36,9 @@
         display:inline;
         visibility: hidden;
       }    
+      p {
+        font-size: 10px;
+      }   
       
       
       
@@ -94,16 +97,15 @@
         <input th:id="${'autocompletePiilossa'}+${numero}" th:name="${'autocompletePiilossa'}+${numero}" value="" hidden="hidden" />  
     </div>
     <button type="submit">N&auml;yt&auml; sijainnit kartalla!</button>
+    <br/>
+    <p>Listan ensimm&auml;inen osoite on l&auml;ht&ouml;- ja paluuosoite, &auml;l&auml; sy&ouml;t&auml; samaa sijaintia useaa kertaa. Sy&ouml;t&auml; v&auml;hint&auml;&auml;n 3 osoitetta.</p>
+    <th:block th:each="statistiikka : ${statistiikat}">
+        <p  th:text="${statistiikka}"></p>
+    </th:block>
   </form>
        
        
        
-       
-       <div>
-       <th:block th:each="statistiikka : ${statistiikat}">
-           <p th:text="${statistiikka}"></p><br/>
-       </th:block>
-       </div>
        
   </div>
     
@@ -151,7 +153,7 @@
         function onPlaceChanged[[${numero}]]() {
             var place = autocomplete[[${numero}]].getPlace();
             if (place.place_id) {
-              document.getElementById('autocompletePiilossa[[${numero}]]').value = document.getElementById('autocompleteKentta[[${numero}]]').value;
+              document.getElementById('autocompletePiilossa[[${numero}]]').value = place.place_id;
               document.getElementById('kenttaOK[[${numero}]]').style.visibility = 'visible'; 
             } else {
               document.getElementById('autocompleteKentta[[${numero}]]').placeholder = 'Lisää toimituskohde';
@@ -193,15 +195,15 @@
         var waypts = [];
         for (var i = 0; i < wayptsLackStopover.length; i++) {
             waypts.push({
-              location: wayptsLackStopover[i],
+              location: {'placeId': wayptsLackStopover[i]},
               stopover: true
             });
           
         }
 
         directionsService.route({
-          origin: [[${start}]],
-          destination: [[${end}]],
+          origin: {'placeId': [[${start}]]},
+          destination: {'placeId': [[${end}]]},
           waypoints: waypts,
           optimizeWaypoints: false,
           travelMode: 'DRIVING'

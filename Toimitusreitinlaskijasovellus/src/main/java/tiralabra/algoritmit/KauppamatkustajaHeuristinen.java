@@ -5,6 +5,13 @@ package tiralabra.algoritmit;
 
 public class KauppamatkustajaHeuristinen {
     
+    /**
+     * Selvittää lyhimmän reitin verkossa käyttäen hyväksi heuristista taktiikkaa.
+     * Lisää jo rakennettuun reittiin aina solmun joka on lähimpänä jo rakennetun reitin
+     * häntää tai päätä.
+     * @param verkko Verkko matriisimuodossa.
+     * @return reittiohje-taulukko.
+     */
     public static int[] ratkaise(int[][] verkko){    // IDEA: wikistä, lähin naapuri taktiikka. IMPLEMENTAATIO: itse.
         // Erikoistapaukset:
         if(verkko.length == 1){
