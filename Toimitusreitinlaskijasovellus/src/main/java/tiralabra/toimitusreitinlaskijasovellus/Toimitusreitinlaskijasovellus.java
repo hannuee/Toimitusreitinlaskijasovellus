@@ -55,10 +55,6 @@ public class Toimitusreitinlaskijasovellus {
             
             // Pyydetään Google Distance Matrix API:lta etäisyys jokaisen toimituskohdeparin välille.
             int[][] verkko = GoogleMaps.annaEtaisyysmatriisi(toimituskohteet);
-            
-            for(int[] rivi : verkko){
-                System.out.println(Arrays.toString(rivi));
-            }
 
             
             // Selvitetään lyhin toimitusreitti 3 eri tavalla.
